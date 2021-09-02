@@ -1,0 +1,163 @@
+36. Valid Sudoku
+Medium
+
+3303
+
+609
+
+Add to List
+
+Share
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+Each row must contain the digits 1-9 without repetition.
+Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+Note:
+
+A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+Only the filled cells need to be validated according to the mentioned rules.
+ 
+
+Example 1:
+
+
+Input: board = 
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: true
+Example 2:
+
+Input: board = 
+[["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: false
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8's in the top left 3x3 sub-box, it is invalid.
+ 
+
+Constraints:
+
+board.length == 9
+board[i].length == 9
+board[i][j] is a digit 1-9 or '.'.
+
+======================================================================================
+#include<bits/stdc++.h>
+class Solution {
+public:
+    bool row(vector<char> v)
+    {
+        map<char,int> m;
+        for(int i=0;i<v.size();i++)
+        {
+            m[v[i]]++;
+        }
+        bool x=true;
+        for(auto it=m.begin();it!=m.end();it++)
+        {
+            if(it->second>1)
+            {
+                x=false;
+                break;
+            }
+        }
+        return x;
+    }
+    bool isValidSudoku(vector<vector<char>>& board) {
+        bool res=true;
+        for(int i=0;i<9;i++)
+        {
+            vector<char> v1;
+            vector<char> v2;
+            for(int j=0;j<9;j++)
+            {
+                if(board[i][j]!='.')
+                {
+                    v1.push_back(board[i][j]);
+                }
+                if(board[j][i]!='.')
+                {
+                    v2.push_back(board[j][i]);
+                }
+            }
+            if(!row(v1) || !row(v2))
+            {
+                return false;
+                break;
+            }
+        }
+        for(int i=0;i+3<=9;i+=3)
+        {
+            vector<char> v1;
+            vector<char> v2;
+            vector<char> v3;
+            for(int j=0;j<9;j++)
+            {
+                if(j<3)
+                {
+                    if(board[i][j]!='.')
+                    {
+                        v1.push_back(board[i][j]);
+                    }
+                    if(board[i+1][j]!='.')
+                    {
+                        v1.push_back(board[i+1][j]);
+                    }
+                    if(board[i+2][j]!='.')
+                    {
+                        v1.push_back(board[i+2][j]);
+                    }
+                }
+                else if(j<6)
+                {
+                    if(board[i][j]!='.')
+                    {
+                        v2.push_back(board[i][j]);
+                    }
+                    if(board[i+1][j]!='.')
+                    {
+                        v2.push_back(board[i+1][j]);
+                    }
+                    if(board[i+2][j]!='.')
+                    {
+                        v2.push_back(board[i+2][j]);
+                    }
+                }
+                else
+                {
+                    if(board[i][j]!='.')
+                    {
+                        v3.push_back(board[i][j]);
+                    }
+                    if(board[i+1][j]!='.')
+                    {
+                        v3.push_back(board[i+1][j]);
+                    }
+                    if(board[i+2][j]!='.')
+                    {
+                        v3.push_back(board[i+2][j]);
+                    }
+                }
+            }
+            if(!row(v1) || !row(v2) || !row(v3))
+            {
+                return false;
+            }
+        }
+        return res;
+    }
+};
